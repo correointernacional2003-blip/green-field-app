@@ -67,13 +67,41 @@ export interface AuthResponse {
 // Auth API
 export const authAPI = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post('/api/auth/login', data);
-    return response.data;
+    console.log('🔐 Intentando login con datos:', { username: data.username, hasPassword: !!data.password });
+    try {
+      const response = await api.post('/api/auth/login', data);
+      console.log('✅ Login exitoso:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('❌ Error en login:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      throw error;
+    }
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post('/api/auth/register', data);
-    return response.data;
+    console.log('📝 Intentando registro con datos:', {
+      username: data.username,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      hasPassword: !!data.password
+    });
+    try {
+      const response = await api.post('/api/auth/register', data);
+      console.log('✅ Registro exitoso:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('❌ Error en registro:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      throw error;
+    }
   },
 };
 
