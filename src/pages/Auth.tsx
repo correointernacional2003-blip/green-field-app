@@ -20,8 +20,14 @@ const loginSchema = z.object({
 const registerSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Contraseña debe tener al menos 6 caracteres'),
-  firstName: z.string().min(2, 'Nombre debe tener al menos 2 caracteres'),
+  dni: z.string().min(3, 'DNI debe tener al menos 3 caracteres'),
+  name: z.string().min(2, 'Nombre debe tener al menos 2 caracteres'),
   lastName: z.string().min(2, 'Apellido debe tener al menos 2 caracteres'),
+  farm: z.object({
+    name: z.string().min(2, 'Nombre de la finca debe tener al menos 2 caracteres'),
+    description: z.string().optional(),
+    location: z.string().min(2, 'Ubicación debe tener al menos 2 caracteres'),
+  }),
 });
 
 const Auth = () => {
@@ -37,8 +43,14 @@ const Auth = () => {
   const [registerData, setRegisterData] = useState<RegisterRequest>({
     email: '',
     password: '',
-    firstName: '',
+    dni: '',
+    name: '',
     lastName: '',
+    farm: {
+      name: '',
+      description: '',
+      location: '',
+    },
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -199,12 +211,12 @@ const Auth = () => {
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">Nombre</Label>
+                      <Label htmlFor="name">Nombre</Label>
                       <Input
-                        id="firstName"
+                        id="name"
                         placeholder="Juan"
-                        value={registerData.firstName}
-                        onChange={(e) => setRegisterData({ ...registerData, firstName: e.target.value })}
+                        value={registerData.name}
+                        onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
                         required
                         disabled={isLoading}
                       />
@@ -220,6 +232,17 @@ const Auth = () => {
                         disabled={isLoading}
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dni">DNI / Documento</Label>
+                    <Input
+                      id="dni"
+                      placeholder="A123456"
+                      value={registerData.dni}
+                      onChange={(e) => setRegisterData({ ...registerData, dni: e.target.value })}
+                      required
+                      disabled={isLoading}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -245,6 +268,54 @@ const Auth = () => {
                       disabled={isLoading}
                     />
                   </div>
+                  
+                  <div className="border-t border-border pt-4 mt-4">
+                    <h3 className="text-sm font-semibold mb-3 text-foreground">Información de la Finca</h3>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="farmName">Nombre de la Finca</Label>
+                        <Input
+                          id="farmName"
+                          placeholder="Mi Finca"
+                          value={registerData.farm.name}
+                          onChange={(e) => setRegisterData({ 
+                            ...registerData, 
+                            farm: { ...registerData.farm, name: e.target.value } 
+                          })}
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="farmLocation">Ubicación</Label>
+                        <Input
+                          id="farmLocation"
+                          placeholder="Ciudad, Departamento"
+                          value={registerData.farm.location}
+                          onChange={(e) => setRegisterData({ 
+                            ...registerData, 
+                            farm: { ...registerData.farm, location: e.target.value } 
+                          })}
+                          required
+                          disabled={isLoading}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="farmDescription">Descripción (Opcional)</Label>
+                        <Input
+                          id="farmDescription"
+                          placeholder="Descripción de la finca"
+                          value={registerData.farm.description}
+                          onChange={(e) => setRegisterData({ 
+                            ...registerData, 
+                            farm: { ...registerData.farm, description: e.target.value } 
+                          })}
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (
                       <>

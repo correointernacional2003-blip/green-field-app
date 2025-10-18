@@ -48,8 +48,14 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  firstName: string;
+  dni: string;
+  name: string;
   lastName: string;
+  farm: {
+    name: string;
+    description: string;
+    location: string;
+  };
 }
 
 export interface AuthResponse {
@@ -78,8 +84,10 @@ export const authAPI = {
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
     console.log('📝 Intentando registro con datos:', {
       email: data.email,
-      firstName: data.firstName,
+      dni: data.dni,
+      name: data.name,
       lastName: data.lastName,
+      farm: data.farm,
       hasPassword: !!data.password
     });
     try {
