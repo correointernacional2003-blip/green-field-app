@@ -105,6 +105,25 @@ export const authAPI = {
   },
 };
 
+// Animal types
+export interface Animal {
+  id?: number;
+  name: string;
+  earring: string;
+  birthDate: string;
+  sex: 'MALE' | 'FEMALE';
+  lotId: number;
+  breedId: number;
+  paddockId: number;
+  entry: string;
+  acquisition: string;
+  origin: string;
+  status: 'ACTIVE' | 'SOLD' | 'DECEASED' | 'TRANSFERRED';
+  weight?: number;
+  color?: string;
+  observations?: string;
+}
+
 // Generic API helpers for CRUD operations
 export const createCRUDAPI = <T>(endpoint: string) => ({
   getAll: async (farmId: number, params?: any) => {
@@ -132,3 +151,6 @@ export const createCRUDAPI = <T>(endpoint: string) => ({
     return response.data;
   },
 });
+
+// Animals API
+export const animalsAPI = createCRUDAPI<Animal>('/animals');
