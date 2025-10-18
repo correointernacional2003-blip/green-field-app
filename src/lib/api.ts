@@ -32,7 +32,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token expired or invalid
       localStorage.removeItem('agrosmart_token');
-      localStorage.removeItem('agrosmart_user');
+      localStorage.removeItem('agrosmart_refresh_token');
       window.location.href = '/auth';
     }
     return Promise.reject(error);
@@ -41,33 +41,26 @@ api.interceptors.response.use(
 
 // Auth types
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface RegisterRequest {
-  username: string;
-  password: string;
   email: string;
+  password: string;
   firstName: string;
   lastName: string;
 }
 
 export interface AuthResponse {
   token: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-  };
+  refreshToken: string;
 }
 
 // Auth API
 export const authAPI = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    console.log('🔐 Intentando login con datos:', { username: data.username, hasPassword: !!data.password });
+    console.log('🔐 Intentando login con datos:', { email: data.email, hasPassword: !!data.password });
     try {
       const response = await api.post('/api/auth/login', data);
       console.log('✅ Login exitoso:', response.data);
@@ -84,7 +77,6 @@ export const authAPI = {
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
     console.log('📝 Intentando registro con datos:', {
-      username: data.username,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,23 +7,12 @@ import {
   Milk, 
   Apple, 
   LogOut,
-  BarChart3,
-  Users
+  BarChart3
 } from 'lucide-react';
-import { getUser, clearAuth } from '@/lib/auth';
+import { clearAuth } from '@/lib/auth';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const currentUser = getUser();
-    if (!currentUser) {
-      navigate('/auth');
-    } else {
-      setUser(currentUser);
-    }
-  }, [navigate]);
 
   const handleLogout = () => {
     clearAuth();
@@ -82,10 +70,6 @@ const Dashboard = () => {
     },
   ];
 
-  if (!user) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-soft">
       {/* Header */}
@@ -102,12 +86,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-foreground">{user.firstName} {user.lastName}</p>
-                <p className="text-xs text-muted-foreground">@{user.username}</p>
-              </div>
-              <Button variant="outline" size="icon" onClick={handleLogout}>
+              <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">
                 <LogOut className="h-4 w-4" />
+                Cerrar Sesión
               </Button>
             </div>
           </div>
@@ -118,7 +99,7 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Bienvenido, {user.firstName}
+            Panel de Control
           </h2>
           <p className="text-muted-foreground">
             Selecciona un módulo para comenzar a gestionar tu granja

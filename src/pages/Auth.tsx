@@ -13,12 +13,11 @@ import { z } from 'zod';
 import heroImage from '@/assets/hero-agro.jpg';
 
 const loginSchema = z.object({
-  username: z.string().min(3, 'Usuario debe tener al menos 3 caracteres'),
+  email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Contraseña debe tener al menos 6 caracteres'),
 });
 
 const registerSchema = z.object({
-  username: z.string().min(3, 'Usuario debe tener al menos 3 caracteres'),
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'Contraseña debe tener al menos 6 caracteres'),
   firstName: z.string().min(2, 'Nombre debe tener al menos 2 caracteres'),
@@ -31,14 +30,13 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [loginData, setLoginData] = useState<LoginRequest>({
-    username: '',
+    email: '',
     password: '',
   });
 
   const [registerData, setRegisterData] = useState<RegisterRequest>({
-    username: '',
-    password: '',
     email: '',
+    password: '',
     firstName: '',
     lastName: '',
   });
@@ -55,7 +53,7 @@ const Auth = () => {
       
       toast({
         title: 'Bienvenido',
-        description: `Has iniciado sesión como ${response.user.username}`,
+        description: 'Has iniciado sesión exitosamente',
       });
       
       navigate('/dashboard');
@@ -161,12 +159,13 @@ const Auth = () => {
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-username">Usuario</Label>
+                    <Label htmlFor="login-email">Email</Label>
                     <Input
-                      id="login-username"
-                      placeholder="tu_usuario"
-                      value={loginData.username}
-                      onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                      id="login-email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       required
                       disabled={isLoading}
                     />
@@ -221,17 +220,6 @@ const Auth = () => {
                         disabled={isLoading}
                       />
                     </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="register-username">Usuario</Label>
-                    <Input
-                      id="register-username"
-                      placeholder="tu_usuario"
-                      value={registerData.username}
-                      onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
-                      required
-                      disabled={isLoading}
-                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
