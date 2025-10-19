@@ -162,7 +162,7 @@ export const createCRUDAPI = <T>(endpoint: string) => ({
   },
 
   update: async (farmId: number, id: number, data: Partial<T>): Promise<T> => {
-    const response = await api.put(`/api/farm/${farmId}${endpoint}/${id}`, data);
+    const response = await api.patch(`/api/farm/${farmId}${endpoint}/${id}`, data);
     return response.data;
   },
 
@@ -190,16 +190,12 @@ export interface Lot {
 // Paddock types
 export interface Paddock {
   id?: number;
-  code: string;
   name: string;
-  area?: number;
-  capacity?: number;
-  currentOccupancy?: number;
+  surface?: number;
   type?: 'PASTURE' | 'CORRAL' | 'STABLE' | 'OTHER';
-  status: 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE';
   location?: string;
+  description?: string;
   farmId?: number;
-  createdAt?: string;
 }
 
 // Animals API

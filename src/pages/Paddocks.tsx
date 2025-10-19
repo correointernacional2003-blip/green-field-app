@@ -23,13 +23,10 @@ const Paddocks = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPaddock, setEditingPaddock] = useState<Paddock | null>(null);
   const [formData, setFormData] = useState<Partial<Paddock>>({
-    code: '',
     name: '',
-    area: undefined,
-    capacity: undefined,
-    currentOccupancy: undefined,
+    description: '',
+    surface: undefined,
     type: 'PASTURE',
-    status: 'AVAILABLE',
     location: ''
   });
 
@@ -119,13 +116,10 @@ const Paddocks = () => {
 
   const resetForm = () => {
     setFormData({
-      code: '',
       name: '',
-      area: undefined,
-      capacity: undefined,
-      currentOccupancy: undefined,
+      surface: undefined,
       type: 'PASTURE',
-      status: 'AVAILABLE',
+      description: '',
       location: ''
     });
   };
@@ -172,15 +166,6 @@ const Paddocks = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="code">Código *</Label>
-                      <Input
-                        id="code"
-                        value={formData.code}
-                        onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="name">Nombre *</Label>
                       <Input
                         id="name"
@@ -206,19 +191,6 @@ const Paddocks = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="status">Estado *</Label>
-                      <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as Paddock['status'] })}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="AVAILABLE">Disponible</SelectItem>
-                          <SelectItem value="OCCUPIED">Ocupado</SelectItem>
-                          <SelectItem value="MAINTENANCE">Mantenimiento</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-4">
@@ -228,26 +200,8 @@ const Paddocks = () => {
                         id="area"
                         type="number"
                         step="0.01"
-                        value={formData.area || ''}
-                        onChange={(e) => setFormData({ ...formData, area: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="capacity">Capacidad</Label>
-                      <Input
-                        id="capacity"
-                        type="number"
-                        value={formData.capacity || ''}
-                        onChange={(e) => setFormData({ ...formData, capacity: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="currentOccupancy">Ocupación Actual</Label>
-                      <Input
-                        id="currentOccupancy"
-                        type="number"
-                        value={formData.currentOccupancy || ''}
-                        onChange={(e) => setFormData({ ...formData, currentOccupancy: e.target.value ? Number(e.target.value) : undefined })}
+                        value={formData.surface || ''}
+                        onChange={(e) => setFormData({ ...formData, surface: e.target.value ? Number(e.target.value) : undefined })}
                       />
                     </div>
                   </div>
@@ -259,6 +213,15 @@ const Paddocks = () => {
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       placeholder="Ej: Sector norte, cerca del río"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Ubicación</Label>
+                    <Input
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder=""
                     />
                   </div>
 
@@ -298,26 +261,22 @@ const Paddocks = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Código</TableHead>
+                    <TableHead>ID</TableHead>
                     <TableHead>Nombre</TableHead>
                     <TableHead>Tipo</TableHead>
                     <TableHead>Área</TableHead>
-                    <TableHead>Capacidad</TableHead>
-                    <TableHead>Ocupación</TableHead>
-                    <TableHead>Estado</TableHead>
+                    <TableHead>descripción</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paddocks.map((paddock) => (
                     <TableRow key={paddock.id}>
-                      <TableCell className="font-medium">{paddock.code}</TableCell>
+                      <TableCell className="font-medium">{paddock.id}</TableCell>
                       <TableCell>{paddock.name}</TableCell>
                       <TableCell>{paddock.type}</TableCell>
-                      <TableCell>{paddock.area ? `${paddock.area} ha` : '-'}</TableCell>
-                      <TableCell>{paddock.capacity || '-'}</TableCell>
-                      <TableCell>{paddock.currentOccupancy || '0'}</TableCell>
-                      <TableCell>{getStatusBadge(paddock.status)}</TableCell>
+                      <TableCell>{paddock.surface ? `${paddock.surface} ha` : '-'}</TableCell>
+                      <TableCell>{paddock.description}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button
