@@ -177,12 +177,7 @@ export interface Breed {
   id?: number;
   name: string;
   description?: string;
-  origin?: string;
-  averageWeight?: number;
-  milkProduction?: number;
-  characteristics?: string;
   farmId?: number;
-  createdAt?: string;
 }
 
 // Lot types

@@ -24,10 +24,6 @@ const Breeds = () => {
   const [formData, setFormData] = useState<Partial<Breed>>({
     name: '',
     description: '',
-    origin: '',
-    averageWeight: undefined,
-    milkProduction: undefined,
-    characteristics: ''
   });
 
   // Fetch breeds
@@ -118,10 +114,6 @@ const Breeds = () => {
     setFormData({
       name: '',
       description: '',
-      origin: '',
-      averageWeight: undefined,
-      milkProduction: undefined,
-      characteristics: ''
     });
   };
 
@@ -166,37 +158,6 @@ const Breeds = () => {
                         required
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="origin">Origen</Label>
-                      <Input
-                        id="origin"
-                        value={formData.origin}
-                        onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="averageWeight">Peso Promedio (kg)</Label>
-                      <Input
-                        id="averageWeight"
-                        type="number"
-                        step="0.1"
-                        value={formData.averageWeight || ''}
-                        onChange={(e) => setFormData({ ...formData, averageWeight: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="milkProduction">Producción Láctea (L/día)</Label>
-                      <Input
-                        id="milkProduction"
-                        type="number"
-                        step="0.1"
-                        value={formData.milkProduction || ''}
-                        onChange={(e) => setFormData({ ...formData, milkProduction: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -205,16 +166,6 @@ const Breeds = () => {
                       id="description"
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      rows={3}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="characteristics">Características</Label>
-                    <Textarea
-                      id="characteristics"
-                      value={formData.characteristics}
-                      onChange={(e) => setFormData({ ...formData, characteristics: e.target.value })}
                       rows={3}
                     />
                   </div>
@@ -266,9 +217,7 @@ const Breeds = () => {
                   {breeds.map((breed) => (
                     <TableRow key={breed.id}>
                       <TableCell className="font-medium">{breed.name}</TableCell>
-                      <TableCell>{breed.origin || '-'}</TableCell>
-                      <TableCell>{breed.averageWeight ? `${breed.averageWeight} kg` : '-'}</TableCell>
-                      <TableCell>{breed.milkProduction ? `${breed.milkProduction} L/día` : '-'}</TableCell>
+                      <TableCell>{breed.description || '--'}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button
