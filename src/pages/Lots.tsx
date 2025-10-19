@@ -24,12 +24,8 @@ const Lots = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingLot, setEditingLot] = useState<Lot | null>(null);
   const [formData, setFormData] = useState<Partial<Lot>>({
-    code: '',
     name: '',
     description: '',
-    capacity: undefined,
-    currentQuantity: undefined,
-    status: 'ACTIVE'
   });
 
   // Fetch lots
@@ -118,12 +114,8 @@ const Lots = () => {
 
   const resetForm = () => {
     setFormData({
-      code: '',
       name: '',
       description: '',
-      capacity: undefined,
-      currentQuantity: undefined,
-      status: 'ACTIVE'
     });
   };
 
@@ -136,7 +128,7 @@ const Lots = () => {
     return <Badge variant={variants[status]}>{status}</Badge>;
   };
 
-  const lots = lotsData?.items || [];
+  const lots = lotsData ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">
@@ -169,15 +161,6 @@ const Lots = () => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="code">Código *</Label>
-                      <Input
-                        id="code"
-                        value={formData.code}
-                        onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
                       <Label htmlFor="name">Nombre *</Label>
                       <Input
                         id="name"
@@ -185,40 +168,6 @@ const Lots = () => {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
                       />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="capacity">Capacidad</Label>
-                      <Input
-                        id="capacity"
-                        type="number"
-                        value={formData.capacity || ''}
-                        onChange={(e) => setFormData({ ...formData, capacity: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="currentQuantity">Cantidad Actual</Label>
-                      <Input
-                        id="currentQuantity"
-                        type="number"
-                        value={formData.currentQuantity || ''}
-                        onChange={(e) => setFormData({ ...formData, currentQuantity: e.target.value ? Number(e.target.value) : undefined })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="status">Estado *</Label>
-                      <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as Lot['status'] })}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ACTIVE">Activo</SelectItem>
-                          <SelectItem value="INACTIVE">Inactivo</SelectItem>
-                          <SelectItem value="FULL">Lleno</SelectItem>
-                        </SelectContent>
-                      </Select>
                     </div>
                   </div>
 
@@ -268,22 +217,18 @@ const Lots = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Código</TableHead>
+                    <TableHead>ID</TableHead>
                     <TableHead>Nombre</TableHead>
-                    <TableHead>Capacidad</TableHead>
-                    <TableHead>Cantidad Actual</TableHead>
-                    <TableHead>Estado</TableHead>
+                    <TableHead>Descripción</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {lots.map((lot) => (
                     <TableRow key={lot.id}>
-                      <TableCell className="font-medium">{lot.code}</TableCell>
+                      <TableCell className="font-medium">{lot.id}</TableCell>
                       <TableCell>{lot.name}</TableCell>
-                      <TableCell>{lot.capacity || '-'}</TableCell>
-                      <TableCell>{lot.currentQuantity || '0'}</TableCell>
-                      <TableCell>{getStatusBadge(lot.status)}</TableCell>
+                      <TableCell>{lot.description || '--'}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button

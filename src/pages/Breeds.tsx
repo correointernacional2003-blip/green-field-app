@@ -206,6 +206,7 @@ const Breeds = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>ID</TableHead>
                     <TableHead>Nombre</TableHead>
                     <TableHead>Descripción</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
@@ -214,6 +215,7 @@ const Breeds = () => {
                 <TableBody>
                   {breeds.map((breed) => (
                     <TableRow key={breed.id}>
+                      <TableCell className="font-medium">{breed.id}</TableCell>
                       <TableCell className="font-medium">{breed.name}</TableCell>
                       <TableCell>{breed.description || '--'}</TableCell>
                       <TableCell className="text-right">

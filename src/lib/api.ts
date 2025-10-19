@@ -183,14 +183,8 @@ export interface Breed {
 // Lot types
 export interface Lot {
   id?: number;
-  code: string;
   name: string;
   description?: string;
-  capacity?: number;
-  currentQuantity?: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'FULL';
-  farmId?: number;
-  createdAt?: string;
 }
 
 // Paddock types
