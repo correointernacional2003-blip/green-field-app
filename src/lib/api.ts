@@ -146,7 +146,7 @@ export interface Animal {
 
 // Generic API helpers for CRUD operations
 export const createCRUDAPI = <T>(endpoint: string) => ({
-  getAll: async (farmId: number, params?: any): Promise<PaginatedResponse<T>> => {
+  getAll: async (farmId: number, params?: any): Promise<Breed[]> => {
     const response = await api.get(`/api/farm/${farmId}${endpoint}`, { params });
     return response.data;
   },
