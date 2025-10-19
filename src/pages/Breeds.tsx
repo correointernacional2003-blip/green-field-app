@@ -207,9 +207,7 @@ const Breeds = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Nombre</TableHead>
-                    <TableHead>Origen</TableHead>
-                    <TableHead>Peso Promedio</TableHead>
-                    <TableHead>Producción Láctea</TableHead>
+                    <TableHead>Descripción</TableHead>
                     <TableHead className="text-right">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
