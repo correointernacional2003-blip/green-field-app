@@ -147,27 +147,27 @@ export interface Animal {
 // Generic API helpers for CRUD operations
 export const createCRUDAPI = <T>(endpoint: string) => ({
   getAll: async (farmId: number, params?: any): Promise<PaginatedResponse<T>> => {
-    const response = await api.get(`/api/farms/${farmId}${endpoint}`, { params });
+    const response = await api.get(`/api/farm/${farmId}${endpoint}`, { params });
     return response.data;
   },
 
   getById: async (farmId: number, id: number): Promise<T> => {
-    const response = await api.get(`/api/farms/${farmId}${endpoint}/${id}`);
+    const response = await api.get(`/api/farm/${farmId}${endpoint}/${id}`);
     return response.data;
   },
 
   create: async (farmId: number, data: Partial<T>): Promise<T> => {
-    const response = await api.post(`/api/farms/${farmId}${endpoint}`, data);
+    const response = await api.post(`/api/farm/${farmId}${endpoint}`, data);
     return response.data;
   },
 
   update: async (farmId: number, id: number, data: Partial<T>): Promise<T> => {
-    const response = await api.put(`/api/farms/${farmId}${endpoint}/${id}`, data);
+    const response = await api.put(`/api/farm/${farmId}${endpoint}/${id}`, data);
     return response.data;
   },
 
   delete: async (farmId: number, id: number): Promise<void> => {
-    const response = await api.delete(`/api/farms/${farmId}${endpoint}/${id}`);
+    const response = await api.delete(`/api/farm/${farmId}${endpoint}/${id}`);
     return response.data;
   },
 });
