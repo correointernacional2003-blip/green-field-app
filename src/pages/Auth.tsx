@@ -76,11 +76,23 @@ const Auth = () => {
           title: 'Error de validación',
           description: error.errors[0].message,
         });
+      } else if (error.message === 'Network Error') {
+        toast({
+          variant: 'destructive',
+          title: 'Error de conexión',
+          description: 'No se puede conectar con el servidor. Verifica que la API esté activa y la URL sea correcta.',
+        });
+      } else if (error.response?.status === 401) {
+        toast({
+          variant: 'destructive',
+          title: 'Credenciales inválidas',
+          description: error.response?.data?.message || 'Email o contraseña incorrectos',
+        });
       } else {
         toast({
           variant: 'destructive',
           title: 'Error al iniciar sesión',
-          description: error.response?.data?.message || 'Credenciales inválidas',
+          description: error.response?.data?.message || error.message || 'Ocurrió un error inesperado',
         });
       }
     } finally {
@@ -111,11 +123,23 @@ const Auth = () => {
           title: 'Error de validación',
           description: error.errors[0].message,
         });
+      } else if (error.message === 'Network Error') {
+        toast({
+          variant: 'destructive',
+          title: 'Error de conexión',
+          description: 'No se puede conectar con el servidor. Verifica que la API esté activa y la URL sea correcta.',
+        });
+      } else if (error.response?.data?.code === 'USER_ALREADY_EXISTS') {
+        toast({
+          variant: 'destructive',
+          title: 'Usuario ya existe',
+          description: 'Ya existe una cuenta con este email',
+        });
       } else {
         toast({
           variant: 'destructive',
           title: 'Error al registrarse',
-          description: error.response?.data?.message || 'No se pudo crear la cuenta',
+          description: error.response?.data?.message || error.message || 'No se pudo crear la cuenta',
         });
       }
     } finally {
