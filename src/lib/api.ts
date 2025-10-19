@@ -192,7 +192,7 @@ export interface Paddock {
   id?: number;
   name: string;
   surface?: number;
-  type?: 'PASTURE' | 'CORRAL' | 'STABLE' | 'OTHER';
+  grassType?: 'PASTURE' | 'CORRAL' | 'STABLE' | 'OTHER';
   location?: string;
   description?: string;
   farmId?: number;

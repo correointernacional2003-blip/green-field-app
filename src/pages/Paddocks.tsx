@@ -26,7 +26,7 @@ const Paddocks = () => {
     name: '',
     description: '',
     surface: undefined,
-    type: 'PASTURE',
+    grassType: 'PASTURE',
     location: ''
   });
 
@@ -118,7 +118,7 @@ const Paddocks = () => {
     setFormData({
       name: '',
       surface: undefined,
-      type: 'PASTURE',
+      grassType: 'PASTURE',
       description: '',
       location: ''
     });
@@ -179,7 +179,7 @@ const Paddocks = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="type">Tipo *</Label>
-                      <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value as Paddock['type'] })}>
+                      <Select value={formData.grassType} onValueChange={(value) => setFormData({ ...formData, grassType: value as Paddock['grassType'] })}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
