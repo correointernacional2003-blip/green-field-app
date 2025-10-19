@@ -29,11 +29,27 @@ const Dashboard = () => {
       available: true,
     },
     {
+      title: 'Razas',
+      description: 'Gestión de razas de ganado',
+      icon: Package2,
+      color: 'from-primary-light to-accent',
+      route: '/breeds',
+      available: true,
+    },
+    {
       title: 'Lotes',
-      description: 'Organización de lotes y potreros',
+      description: 'Organización de grupos de ganado',
       icon: Package2,
       color: 'from-accent to-primary',
       route: '/lots',
+      available: true,
+    },
+    {
+      title: 'Potreros',
+      description: 'Gestión de espacios físicos',
+      icon: Package2,
+      color: 'from-primary to-accent',
+      route: '/paddocks',
       available: true,
     },
     {

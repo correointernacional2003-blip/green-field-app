@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Animals from "./pages/Animals";
+import Breeds from "./pages/Breeds";
+import Lots from "./pages/Lots";
+import Paddocks from "./pages/Paddocks";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -35,6 +38,30 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Animals />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/breeds" 
+            element={
+              <ProtectedRoute>
+                <Breeds />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/lots" 
+            element={
+              <ProtectedRoute>
+                <Lots />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/paddocks" 
+            element={
+              <ProtectedRoute>
+                <Paddocks />
               </ProtectedRoute>
             } 
           />

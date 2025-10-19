@@ -172,5 +172,55 @@ export const createCRUDAPI = <T>(endpoint: string) => ({
   },
 });
 
+// Breed types
+export interface Breed {
+  id?: number;
+  name: string;
+  description?: string;
+  origin?: string;
+  averageWeight?: number;
+  milkProduction?: number;
+  characteristics?: string;
+  farmId?: number;
+  createdAt?: string;
+}
+
+// Lot types
+export interface Lot {
+  id?: number;
+  code: string;
+  name: string;
+  description?: string;
+  capacity?: number;
+  currentQuantity?: number;
+  status: 'ACTIVE' | 'INACTIVE' | 'FULL';
+  farmId?: number;
+  createdAt?: string;
+}
+
+// Paddock types
+export interface Paddock {
+  id?: number;
+  code: string;
+  name: string;
+  area?: number;
+  capacity?: number;
+  currentOccupancy?: number;
+  type?: 'PASTURE' | 'CORRAL' | 'STABLE' | 'OTHER';
+  status: 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE';
+  location?: string;
+  farmId?: number;
+  createdAt?: string;
+}
+
 // Animals API
 export const animalsAPI = createCRUDAPI<Animal>('/animals');
+
+// Breeds API
+export const breedsAPI = createCRUDAPI<Breed>('/breeds');
+
+// Lots API
+export const lotsAPI = createCRUDAPI<Lot>('/lots');
+
+// Paddocks API
+export const paddocksAPI = createCRUDAPI<Paddock>('/paddocks');
