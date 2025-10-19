@@ -23,20 +23,23 @@ const Animals = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingAnimal, setEditingAnimal] = useState<Animal | null>(null);
   const [formData, setFormData] = useState<Partial<Animal>>({
+    code: '',
     name: '',
-    earring: '',
-    birthDate: '',
+    birthday: '',
+    purchaseDate: null,
+    purchasePrice: null,
     sex: 'FEMALE',
-    lotId: 0,
-    breedId: 0,
-    paddockId: 0,
-    entry: '',
-    acquisition: '',
-    origin: '',
+    registerType: 'BIRTH',
+    health: 'HEALTHY',
+    birthWeight: 0,
     status: 'ACTIVE',
-    weight: 0,
     color: '',
-    observations: '',
+    brand: '',
+    razaId: 0,
+    lotId: 0,
+    paddockId: 0,
+    fatherId: null,
+    motherId: null,
   });
 
   // Fetch animals
@@ -100,20 +103,23 @@ const Animals = () => {
 
   const resetForm = () => {
     setFormData({
+      code: '',
       name: '',
-      earring: '',
-      birthDate: '',
+      birthday: '',
+      purchaseDate: null,
+      purchasePrice: null,
       sex: 'FEMALE',
-      lotId: 0,
-      breedId: 0,
-      paddockId: 0,
-      entry: '',
-      acquisition: '',
-      origin: '',
+      registerType: 'BIRTH',
+      health: 'HEALTHY',
+      birthWeight: 0,
       status: 'ACTIVE',
-      weight: 0,
       color: '',
-      observations: '',
+      brand: '',
+      razaId: 0,
+      lotId: 0,
+      paddockId: 0,
+      fatherId: null,
+      motherId: null,
     });
     setEditingAnimal(null);
   };
@@ -144,7 +150,7 @@ const Animals = () => {
     setIsDialogOpen(true);
   };
 
-  const animals = animalsData?.content || [];
+  const animals = animalsData?.items || [];
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -172,6 +178,15 @@ const Animals = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
+                    <Label htmlFor="code">Código *</Label>
+                    <Input
+                      id="code"
+                      value={formData.code}
+                      onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="name">Nombre *</Label>
                     <Input
                       id="name"
@@ -181,21 +196,12 @@ const Animals = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="earring">Arete *</Label>
+                    <Label htmlFor="birthday">Fecha de Nacimiento *</Label>
                     <Input
-                      id="earring"
-                      value={formData.earring}
-                      onChange={(e) => setFormData({ ...formData, earring: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="birthDate">Fecha de Nacimiento *</Label>
-                    <Input
-                      id="birthDate"
+                      id="birthday"
                       type="date"
-                      value={formData.birthDate}
-                      onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
+                      value={formData.birthday}
+                      onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
                       required
                     />
                   </div>
@@ -217,6 +223,71 @@ const Animals = () => {
                     </Select>
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="registerType">Tipo de Registro *</Label>
+                    <Select
+                      value={formData.registerType}
+                      onValueChange={(value: 'BIRTH' | 'PURCHASE') => 
+                        setFormData({ ...formData, registerType: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="BIRTH">Nacimiento</SelectItem>
+                        <SelectItem value="PURCHASE">Compra</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="health">Estado de Salud *</Label>
+                    <Select
+                      value={formData.health}
+                      onValueChange={(value: 'HEALTHY' | 'SICK' | 'QUARANTINE') => 
+                        setFormData({ ...formData, health: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="HEALTHY">Saludable</SelectItem>
+                        <SelectItem value="SICK">Enfermo</SelectItem>
+                        <SelectItem value="QUARANTINE">Cuarentena</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="birthWeight">Peso al Nacer (kg)</Label>
+                    <Input
+                      id="birthWeight"
+                      type="number"
+                      step="0.1"
+                      value={formData.birthWeight || ''}
+                      onChange={(e) => setFormData({ ...formData, birthWeight: Number(e.target.value) })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="purchasePrice">Precio de Compra</Label>
+                    <Input
+                      id="purchasePrice"
+                      type="number"
+                      step="0.01"
+                      value={formData.purchasePrice || ''}
+                      onChange={(e) => setFormData({ ...formData, purchasePrice: Number(e.target.value) || null })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="razaId">ID Raza *</Label>
+                    <Input
+                      id="razaId"
+                      type="number"
+                      value={formData.razaId}
+                      onChange={(e) => setFormData({ ...formData, razaId: Number(e.target.value) })}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="lotId">ID Lote *</Label>
                     <Input
                       id="lotId"
@@ -227,50 +298,12 @@ const Animals = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="breedId">ID Raza *</Label>
-                    <Input
-                      id="breedId"
-                      type="number"
-                      value={formData.breedId}
-                      onChange={(e) => setFormData({ ...formData, breedId: Number(e.target.value) })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="paddockId">ID Potrero *</Label>
                     <Input
                       id="paddockId"
                       type="number"
                       value={formData.paddockId}
                       onChange={(e) => setFormData({ ...formData, paddockId: Number(e.target.value) })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="entry">Entrada *</Label>
-                    <Input
-                      id="entry"
-                      type="date"
-                      value={formData.entry}
-                      onChange={(e) => setFormData({ ...formData, entry: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="acquisition">Adquisición *</Label>
-                    <Input
-                      id="acquisition"
-                      value={formData.acquisition}
-                      onChange={(e) => setFormData({ ...formData, acquisition: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="origin">Origen *</Label>
-                    <Input
-                      id="origin"
-                      value={formData.origin}
-                      onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
                       required
                     />
                   </div>
@@ -294,16 +327,6 @@ const Animals = () => {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="weight">Peso (kg)</Label>
-                    <Input
-                      id="weight"
-                      type="number"
-                      step="0.1"
-                      value={formData.weight}
-                      onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) })}
-                    />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="color">Color</Label>
                     <Input
                       id="color"
@@ -311,15 +334,32 @@ const Animals = () => {
                       onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                     />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="observations">Observaciones</Label>
-                  <Textarea
-                    id="observations"
-                    value={formData.observations}
-                    onChange={(e) => setFormData({ ...formData, observations: e.target.value })}
-                    rows={3}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="brand">Marca</Label>
+                    <Input
+                      id="brand"
+                      value={formData.brand}
+                      onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="fatherId">ID Padre</Label>
+                    <Input
+                      id="fatherId"
+                      type="number"
+                      value={formData.fatherId || ''}
+                      onChange={(e) => setFormData({ ...formData, fatherId: Number(e.target.value) || null })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="motherId">ID Madre</Label>
+                    <Input
+                      id="motherId"
+                      type="number"
+                      value={formData.motherId || ''}
+                      onChange={(e) => setFormData({ ...formData, motherId: Number(e.target.value) || null })}
+                    />
+                  </div>
                 </div>
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -354,12 +394,12 @@ const Animals = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Arete</TableHead>
+                      <TableHead>Código</TableHead>
                       <TableHead>Nombre</TableHead>
                       <TableHead>Sexo</TableHead>
                       <TableHead>Fecha Nacimiento</TableHead>
                       <TableHead>Estado</TableHead>
-                      <TableHead>Peso (kg)</TableHead>
+                      <TableHead>Salud</TableHead>
                       <TableHead>Lote</TableHead>
                       <TableHead>Acciones</TableHead>
                     </TableRow>
@@ -367,10 +407,10 @@ const Animals = () => {
                   <TableBody>
                     {animals.map((animal: Animal) => (
                       <TableRow key={animal.id}>
-                        <TableCell className="font-medium">{animal.earring}</TableCell>
+                        <TableCell className="font-medium">{animal.code}</TableCell>
                         <TableCell>{animal.name}</TableCell>
                         <TableCell>{animal.sex === 'MALE' ? 'Macho' : 'Hembra'}</TableCell>
-                        <TableCell>{new Date(animal.birthDate).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(animal.birthday).toLocaleDateString()}</TableCell>
                         <TableCell>
                           <span className={`px-2 py-1 rounded text-xs ${
                             animal.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
@@ -383,7 +423,16 @@ const Animals = () => {
                              animal.status === 'DECEASED' ? 'Fallecido' : 'Transferido'}
                           </span>
                         </TableCell>
-                        <TableCell>{animal.weight || '-'}</TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            animal.health === 'HEALTHY' ? 'bg-green-100 text-green-800' :
+                            animal.health === 'SICK' ? 'bg-red-100 text-red-800' :
+                            'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {animal.health === 'HEALTHY' ? 'Saludable' :
+                             animal.health === 'SICK' ? 'Enfermo' : 'Cuarentena'}
+                          </span>
+                        </TableCell>
                         <TableCell>{animal.lotId}</TableCell>
                         <TableCell>
                           <div className="flex gap-2">

@@ -105,49 +105,69 @@ export const authAPI = {
   },
 };
 
+// Pagination types
+export interface PaginatedResponse<T> {
+  items: T[];
+  paginationInfo: {
+    currentPage: number;
+    size: number;
+    totalPages: number;
+    totalItems: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+    isFirst: boolean;
+    isLast: boolean;
+  };
+}
+
 // Animal types
 export interface Animal {
   id?: number;
+  code: string;
   name: string;
-  earring: string;
-  birthDate: string;
+  birthday: string;
+  purchaseDate?: string | null;
+  purchasePrice?: number | null;
   sex: 'MALE' | 'FEMALE';
-  lotId: number;
-  breedId: number;
-  paddockId: number;
-  entry: string;
-  acquisition: string;
-  origin: string;
+  registerType: 'BIRTH' | 'PURCHASE';
+  health: 'HEALTHY' | 'SICK' | 'QUARANTINE';
+  birthWeight?: number;
   status: 'ACTIVE' | 'SOLD' | 'DECEASED' | 'TRANSFERRED';
-  weight?: number;
   color?: string;
-  observations?: string;
+  brand?: string;
+  razaId: number;
+  lotId: number;
+  paddockId: number;
+  fatherId?: number | null;
+  motherId?: number | null;
+  farmId?: number;
+  createdAt?: string;
 }
 
 // Generic API helpers for CRUD operations
 export const createCRUDAPI = <T>(endpoint: string) => ({
-  getAll: async (farmId: number, params?: any) => {
-    const response = await api.get(`/api/farm/${farmId}${endpoint}`, { params });
+  getAll: async (farmId: number, params?: any): Promise<PaginatedResponse<T>> => {
+    const response = await api.get(`/api/farms/${farmId}${endpoint}`, { params });
     return response.data;
   },
 
-  getById: async (farmId: number, id: number) => {
-    const response = await api.get(`/api/farm/${farmId}${endpoint}/${id}`);
+  getById: async (farmId: number, id: number): Promise<T> => {
+    const response = await api.get(`/api/farms/${farmId}${endpoint}/${id}`);
     return response.data;
   },
 
-  create: async (farmId: number, data: Partial<T>) => {
-    const response = await api.post(`/api/farm/${farmId}${endpoint}`, data);
+  create: async (farmId: number, data: Partial<T>): Promise<T> => {
+    const response = await api.post(`/api/farms/${farmId}${endpoint}`, data);
     return response.data;
   },
 
-  update: async (farmId: number, id: number, data: Partial<T>) => {
-    const response = await api.put(`/api/farm/${farmId}${endpoint}/${id}`, data);
+  update: async (farmId: number, id: number, data: Partial<T>): Promise<T> => {
+    const response = await api.put(`/api/farms/${farmId}${endpoint}/${id}`, data);
     return response.data;
   },
 
-  delete: async (farmId: number, id: number) => {
-    const response = await api.delete(`/api/farm/${farmId}${endpoint}/${id}`);
+  delete: async (farmId: number, id: number): Promise<void> => {
+    const response = await api.delete(`/api/farms/${farmId}${endpoint}/${id}`);
     return response.data;
   },
 });
