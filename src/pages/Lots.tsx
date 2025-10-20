@@ -128,7 +128,7 @@ const Lots = () => {
     return <Badge variant={variants[status]}>{status}</Badge>;
   };
 
-  const lots = lotsData ?? { items: [], paginationInfo: { currentPage: 0, size: 0, totalPages: 0, totalItems: 0, hasNext: false, hasPrevious: false, isFirst: true, isLast: true } };
+  const lots = lotsData?.items ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">
@@ -209,7 +209,7 @@ const Lots = () => {
                   <Skeleton key={i} className="h-12 w-full" />
                 ))}
               </div>
-            ) : lots.items.length === 0 ? (
+            ) : lots.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No hay lotes registrados. Crea un nuevo lote para comenzar.
               </div>
@@ -224,7 +224,7 @@ const Lots = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {lots.items.map((lot) => (
+                  {lots.map((lot) => (
                     <TableRow key={lot.id}>
                       <TableCell className="font-medium">{lot.id}</TableCell>
                       <TableCell>{lot.name}</TableCell>

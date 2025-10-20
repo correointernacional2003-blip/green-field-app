@@ -117,7 +117,7 @@ const Breeds = () => {
     });
   };
 
-  const breeds = breedsData ?? { items: [], paginationInfo: { currentPage: 0, size: 0, totalPages: 0, totalItems: 0, hasNext: false, hasPrevious: false, isFirst: true, isLast: true } };
+  const breeds = breedsData?.items ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">
@@ -198,7 +198,7 @@ const Breeds = () => {
                   <Skeleton key={i} className="h-12 w-full" />
                 ))}
               </div>
-            ) : breeds.items.length === 0 ? (
+            ) : breeds.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No hay razas registradas. Crea una nueva raza para comenzar.
               </div>
@@ -213,7 +213,7 @@ const Breeds = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {breeds.items.map((breed) => (
+                  {breeds.map((breed) => (
                     <TableRow key={breed.id}>
                       <TableCell className="font-medium">{breed.id}</TableCell>
                       <TableCell className="font-medium">{breed.name}</TableCell>
