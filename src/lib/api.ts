@@ -264,6 +264,18 @@ export interface Paddock {
   farmId?: number;
 }
 
+// Milking types
+export interface Milking {
+  id?: number;
+  date: string;
+  shift: 'MORNING' | 'AFTERNOON' | 'NIGHT';
+  quantity: number;
+  observations?: string;
+  animalId: number;
+  farmId?: number;
+  createdAt?: string;
+}
+
 // Animals API (paginated)
 export const animalsAPI = createCRUDAPI<Animal>('/animals');
 
@@ -275,3 +287,6 @@ export const lotsAPI = createSimpleCRUDAPI<Lot>('/lots');
 
 // Paddocks API (not paginated - returns array directly)
 export const paddocksAPI = createSimpleCRUDAPI<Paddock>('/paddocks');
+
+// Milkings API (paginated)
+export const milkingsAPI = createCRUDAPI<Milking>('/milkings');

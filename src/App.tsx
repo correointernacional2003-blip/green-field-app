@@ -9,6 +9,7 @@ import Animals from "./pages/Animals";
 import Breeds from "./pages/Breeds";
 import Lots from "./pages/Lots";
 import Paddocks from "./pages/Paddocks";
+import Milkings from "./pages/Milkings";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -62,6 +63,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Paddocks />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/milkings" 
+            element={
+              <ProtectedRoute>
+                <Milkings />
               </ProtectedRoute>
             } 
           />
