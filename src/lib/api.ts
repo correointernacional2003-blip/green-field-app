@@ -25,16 +25,54 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors
+// Response interceptor to handle errors and refresh token
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid
-      localStorage.removeItem('agrosmart_token');
-      localStorage.removeItem('agrosmart_refresh_token');
-      window.location.href = '/auth';
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Handle 401 or 403 errors (token expired)
+    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem('agrosmart_refresh_token');
+        
+        if (!refreshToken) {
+          throw new Error('No refresh token available');
+        }
+
+        // Attempt to refresh the token
+        const response = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
+          refreshToken
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+          }
+        });
+
+        const { token, refreshToken: newRefreshToken } = response.data;
+
+        // Save new tokens
+        localStorage.setItem('agrosmart_token', token);
+        localStorage.setItem('agrosmart_refresh_token', newRefreshToken);
+
+        // Update the original request with new token
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+
+        // Retry the original request
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Refresh failed, logout user
+        console.error('Token refresh failed:', refreshError);
+        localStorage.removeItem('agrosmart_token');
+        localStorage.removeItem('agrosmart_refresh_token');
+        window.location.href = '/auth';
+        return Promise.reject(refreshError);
+      }
     }
+
     return Promise.reject(error);
   }
 );
@@ -146,7 +184,7 @@ export interface Animal {
 
 // Generic API helpers for CRUD operations
 export const createCRUDAPI = <T>(endpoint: string) => ({
-  getAll: async (farmId: number, params?: any): Promise<T[]> => {
+  getAll: async (farmId: number, params?: any): Promise<PaginatedResponse<T>> => {
     const response = await api.get(`/api/farm/${farmId}${endpoint}`, { params });
     return response.data;
   },

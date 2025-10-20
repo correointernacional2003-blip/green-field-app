@@ -133,7 +133,7 @@ const Paddocks = () => {
     return <Badge variant={variants[status]}>{status}</Badge>;
   };
 
-  const paddocks = paddocksData ?? [];
+  const paddocks = paddocksData ?? { items: [], paginationInfo: { currentPage: 0, size: 0, totalPages: 0, totalItems: 0, hasNext: false, hasPrevious: false, isFirst: true, isLast: true } };
 
   return (
     <div className="min-h-screen bg-gradient-soft">
@@ -253,7 +253,7 @@ const Paddocks = () => {
                   <Skeleton key={i} className="h-12 w-full" />
                 ))}
               </div>
-            ) : paddocks.length === 0 ? (
+            ) : paddocks.items.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 No hay potreros registrados. Crea un nuevo potrero para comenzar.
               </div>
@@ -270,7 +270,7 @@ const Paddocks = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paddocks.map((paddock) => (
+                  {paddocks.items.map((paddock) => (
                     <TableRow key={paddock.id}>
                       <TableCell className="font-medium">{paddock.id}</TableCell>
                       <TableCell>{paddock.name}</TableCell>
