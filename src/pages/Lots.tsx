@@ -128,7 +128,7 @@ const Lots = () => {
     return <Badge variant={variants[status]}>{status}</Badge>;
   };
 
-  const lots = lotsData?.items ?? [];
+  const lots = lotsData ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">

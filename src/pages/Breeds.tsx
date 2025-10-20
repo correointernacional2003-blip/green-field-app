@@ -117,7 +117,7 @@ const Breeds = () => {
     });
   };
 
-  const breeds = breedsData?.items ?? [];
+  const breeds = breedsData ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">

@@ -182,10 +182,38 @@ export interface Animal {
   createdAt?: string;
 }
 
-// Generic API helpers for CRUD operations
+// Generic API helpers for CRUD operations with pagination
 export const createCRUDAPI = <T>(endpoint: string) => ({
   getAll: async (farmId: number, params?: any): Promise<PaginatedResponse<T>> => {
     const response = await api.get(`/api/farm/${farmId}${endpoint}`, { params });
+    return response.data;
+  },
+
+  getById: async (farmId: number, id: number): Promise<T> => {
+    const response = await api.get(`/api/farm/${farmId}${endpoint}/${id}`);
+    return response.data;
+  },
+
+  create: async (farmId: number, data: Partial<T>): Promise<T> => {
+    const response = await api.post(`/api/farm/${farmId}${endpoint}`, data);
+    return response.data;
+  },
+
+  update: async (farmId: number, id: number, data: Partial<T>): Promise<T> => {
+    const response = await api.patch(`/api/farm/${farmId}${endpoint}/${id}`, data);
+    return response.data;
+  },
+
+  delete: async (farmId: number, id: number): Promise<void> => {
+    const response = await api.delete(`/api/farm/${farmId}${endpoint}/${id}`);
+    return response.data;
+  },
+});
+
+// Generic API helpers for CRUD operations without pagination (returns array directly)
+export const createSimpleCRUDAPI = <T>(endpoint: string) => ({
+  getAll: async (farmId: number): Promise<T[]> => {
+    const response = await api.get(`/api/farm/${farmId}${endpoint}`);
     return response.data;
   },
 
@@ -236,14 +264,14 @@ export interface Paddock {
   farmId?: number;
 }
 
-// Animals API
+// Animals API (paginated)
 export const animalsAPI = createCRUDAPI<Animal>('/animals');
 
-// Breeds API
-export const breedsAPI = createCRUDAPI<Breed>('/breeds');
+// Breeds API (not paginated - returns array directly)
+export const breedsAPI = createSimpleCRUDAPI<Breed>('/breeds');
 
-// Lots API
-export const lotsAPI = createCRUDAPI<Lot>('/lots');
+// Lots API (not paginated - returns array directly)
+export const lotsAPI = createSimpleCRUDAPI<Lot>('/lots');
 
-// Paddocks API
-export const paddocksAPI = createCRUDAPI<Paddock>('/paddocks');
+// Paddocks API (not paginated - returns array directly)
+export const paddocksAPI = createSimpleCRUDAPI<Paddock>('/paddocks');

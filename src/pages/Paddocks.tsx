@@ -133,7 +133,7 @@ const Paddocks = () => {
     return <Badge variant={variants[status]}>{status}</Badge>;
   };
 
-  const paddocks = paddocksData?.items ?? [];
+  const paddocks = paddocksData ?? [];
 
   return (
     <div className="min-h-screen bg-gradient-soft">
