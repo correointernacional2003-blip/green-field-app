@@ -268,16 +268,30 @@ const Animals = () => {
                       onChange={(e) => setFormData({ ...formData, birthWeight: Number(e.target.value) })}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="purchasePrice">Precio de Compra</Label>
-                    <Input
-                      id="purchasePrice"
-                      type="number"
-                      step="0.01"
-                      value={formData.purchasePrice || ''}
-                      onChange={(e) => setFormData({ ...formData, purchasePrice: Number(e.target.value) || null })}
-                    />
-                  </div>
+                  {formData.registerType === 'PURCHASE' && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="purchaseDate">Fecha de Compra *</Label>
+                        <Input
+                          id="purchaseDate"
+                          type="date"
+                          value={formData.purchaseDate || ''}
+                          onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value || null })}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="purchasePrice">Precio de Compra</Label>
+                        <Input
+                          id="purchasePrice"
+                          type="number"
+                          step="0.01"
+                          value={formData.purchasePrice || ''}
+                          onChange={(e) => setFormData({ ...formData, purchasePrice: Number(e.target.value) || null })}
+                        />
+                      </div>
+                    </>
+                  )}
                   <div className="space-y-2">
                     <Label htmlFor="razaId">ID Raza *</Label>
                     <Input
