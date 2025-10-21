@@ -1,7 +1,22 @@
 import { AuthResponse } from './api';
+import { jwtDecode } from 'jwt-decode';
 
 export const AUTH_TOKEN_KEY = 'agrosmart_token';
 export const AUTH_REFRESH_TOKEN_KEY = 'agrosmart_refresh_token';
+
+interface DecodedToken {
+  id: number;
+  role: string;
+  type: string;
+  farms: Array<{
+    id: number;
+    name: string;
+    role: string;
+  }>;
+  sub: string;
+  iat: number;
+  exp: number;
+}
 
 export const saveAuth = (data: AuthResponse) => {
   localStorage.setItem(AUTH_TOKEN_KEY, data.token);
@@ -23,4 +38,18 @@ export const clearAuth = () => {
 
 export const isAuthenticated = (): boolean => {
   return !!getToken();
+};
+
+export const getFarmId = (): number | null => {
+  const token = getToken();
+  if (!token) return null;
+  
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    // Return the first farm's ID
+    return decoded.farms?.[0]?.id || null;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
 };

@@ -12,11 +12,11 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, Pencil, Trash2 } from 'lucide-react';
 import { breedsAPI, Breed } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const FARM_ID = 1; // TODO: Get from auth context
+import { useFarmId } from '@/hooks/useFarmId';
 
 const Breeds = () => {
   const navigate = useNavigate();
+  const farmId = useFarmId();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -28,15 +28,16 @@ const Breeds = () => {
 
   // Fetch breeds
   const { data: breedsData, isLoading } = useQuery({
-    queryKey: ['breeds', FARM_ID],
-    queryFn: () => breedsAPI.getAll(FARM_ID)
+    queryKey: ['breeds', farmId],
+    queryFn: () => breedsAPI.getAll(farmId!),
+    enabled: !!farmId,
   });
 
   // Create breed mutation
   const createMutation = useMutation({
-    mutationFn: (data: Partial<Breed>) => breedsAPI.create(FARM_ID, data),
+    mutationFn: (data: Partial<Breed>) => breedsAPI.create(farmId!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['breeds', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['breeds', farmId] });
       toast({ title: 'Raza creada exitosamente' });
       handleCloseDialog();
     },
@@ -52,9 +53,9 @@ const Breeds = () => {
   // Update breed mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Breed> }) =>
-      breedsAPI.update(FARM_ID, id, data),
+      breedsAPI.update(farmId!, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['breeds', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['breeds', farmId] });
       toast({ title: 'Raza actualizada exitosamente' });
       handleCloseDialog();
     },
@@ -69,9 +70,9 @@ const Breeds = () => {
 
   // Delete breed mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => breedsAPI.delete(FARM_ID, id),
+    mutationFn: (id: number) => breedsAPI.delete(farmId!, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['breeds', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['breeds', farmId] });
       toast({ title: 'Raza eliminada exitosamente' });
     },
     onError: (error: any) => {

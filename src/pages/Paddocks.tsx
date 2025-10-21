@@ -13,11 +13,11 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, Pencil, Trash2 } from 'lucide-react';
 import { paddocksAPI, Paddock } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const FARM_ID = 1; // TODO: Get from auth context
+import { useFarmId } from '@/hooks/useFarmId';
 
 const Paddocks = () => {
   const navigate = useNavigate();
+  const farmId = useFarmId();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,15 +32,16 @@ const Paddocks = () => {
 
   // Fetch paddocks
   const { data: paddocksData, isLoading } = useQuery({
-    queryKey: ['paddocks', FARM_ID],
-    queryFn: () => paddocksAPI.getAll(FARM_ID)
+    queryKey: ['paddocks', farmId],
+    queryFn: () => paddocksAPI.getAll(farmId!),
+    enabled: !!farmId,
   });
 
   // Create paddock mutation
   const createMutation = useMutation({
-    mutationFn: (data: Partial<Paddock>) => paddocksAPI.create(FARM_ID, data),
+    mutationFn: (data: Partial<Paddock>) => paddocksAPI.create(farmId!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['paddocks', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['paddocks', farmId] });
       toast({ title: 'Potrero creado exitosamente' });
       handleCloseDialog();
     },
@@ -56,9 +57,9 @@ const Paddocks = () => {
   // Update paddock mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Paddock> }) =>
-      paddocksAPI.update(FARM_ID, id, data),
+      paddocksAPI.update(farmId!, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['paddocks', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['paddocks', farmId] });
       toast({ title: 'Potrero actualizado exitosamente' });
       handleCloseDialog();
     },
@@ -73,9 +74,9 @@ const Paddocks = () => {
 
   // Delete paddock mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => paddocksAPI.delete(FARM_ID, id),
+    mutationFn: (id: number) => paddocksAPI.delete(farmId!, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['paddocks', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['paddocks', farmId] });
       toast({ title: 'Potrero eliminado exitosamente' });
     },
     onError: (error: any) => {

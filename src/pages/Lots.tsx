@@ -14,11 +14,11 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, Pencil, Trash2 } from 'lucide-react';
 import { lotsAPI, Lot } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const FARM_ID = 1; // TODO: Get from auth context
+import { useFarmId } from '@/hooks/useFarmId';
 
 const Lots = () => {
   const navigate = useNavigate();
+  const farmId = useFarmId();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -30,15 +30,16 @@ const Lots = () => {
 
   // Fetch lots
   const { data: lotsData, isLoading } = useQuery({
-    queryKey: ['lots', FARM_ID],
-    queryFn: () => lotsAPI.getAll(FARM_ID)
+    queryKey: ['lots', farmId],
+    queryFn: () => lotsAPI.getAll(farmId!),
+    enabled: !!farmId,
   });
 
   // Create lot mutation
   const createMutation = useMutation({
-    mutationFn: (data: Partial<Lot>) => lotsAPI.create(FARM_ID, data),
+    mutationFn: (data: Partial<Lot>) => lotsAPI.create(farmId!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lots', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['lots', farmId] });
       toast({ title: 'Lote creado exitosamente' });
       handleCloseDialog();
     },
@@ -54,9 +55,9 @@ const Lots = () => {
   // Update lot mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Lot> }) =>
-      lotsAPI.update(FARM_ID, id, data),
+      lotsAPI.update(farmId!, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lots', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['lots', farmId] });
       toast({ title: 'Lote actualizado exitosamente' });
       handleCloseDialog();
     },
@@ -71,9 +72,9 @@ const Lots = () => {
 
   // Delete lot mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => lotsAPI.delete(FARM_ID, id),
+    mutationFn: (id: number) => lotsAPI.delete(farmId!, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lots', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['lots', farmId] });
       toast({ title: 'Lote eliminado exitosamente' });
     },
     onError: (error: any) => {

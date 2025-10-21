@@ -14,11 +14,11 @@ import { useToast } from '@/hooks/use-toast';
 import { ArrowLeft, Plus, Pencil, Trash2, Milk } from 'lucide-react';
 import { milkingsAPI, Milking, animalsAPI } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const FARM_ID = 1; // TODO: Get from auth context
+import { useFarmId } from '@/hooks/useFarmId';
 
 const Milkings = () => {
   const navigate = useNavigate();
+  const farmId = useFarmId();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -33,21 +33,23 @@ const Milkings = () => {
 
   // Fetch milkings (paginated)
   const { data: milkingsData, isLoading } = useQuery({
-    queryKey: ['milkings', FARM_ID],
-    queryFn: () => milkingsAPI.getAll(FARM_ID)
+    queryKey: ['milkings', farmId],
+    queryFn: () => milkingsAPI.getAll(farmId!),
+    enabled: !!farmId,
   });
 
   // Fetch animals for the select dropdown
   const { data: animalsData } = useQuery({
-    queryKey: ['animals', FARM_ID],
-    queryFn: () => animalsAPI.getAll(FARM_ID)
+    queryKey: ['animals', farmId],
+    queryFn: () => animalsAPI.getAll(farmId!),
+    enabled: !!farmId,
   });
 
   // Create milking mutation
   const createMutation = useMutation({
-    mutationFn: (data: Partial<Milking>) => milkingsAPI.create(FARM_ID, data),
+    mutationFn: (data: Partial<Milking>) => milkingsAPI.create(farmId!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['milkings', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['milkings', farmId] });
       toast({ title: 'Ordeño registrado exitosamente' });
       handleCloseDialog();
     },
@@ -63,9 +65,9 @@ const Milkings = () => {
   // Update milking mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Milking> }) =>
-      milkingsAPI.update(FARM_ID, id, data),
+      milkingsAPI.update(farmId!, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['milkings', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['milkings', farmId] });
       toast({ title: 'Ordeño actualizado exitosamente' });
       handleCloseDialog();
     },
@@ -80,9 +82,9 @@ const Milkings = () => {
 
   // Delete milking mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => milkingsAPI.delete(FARM_ID, id),
+    mutationFn: (id: number) => milkingsAPI.delete(farmId!, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['milkings', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['milkings', farmId] });
       toast({ title: 'Ordeño eliminado exitosamente' });
     },
     onError: (error: any) => {

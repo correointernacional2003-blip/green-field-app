@@ -13,11 +13,11 @@ import { useToast } from '@/hooks/use-toast';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const FARM_ID = 1; // TODO: Get from auth context
+import { useFarmId } from '@/hooks/useFarmId';
 
 const Animals = () => {
   const navigate = useNavigate();
+  const farmId = useFarmId();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,15 +44,16 @@ const Animals = () => {
 
   // Fetch animals
   const { data: animalsData, isLoading } = useQuery({
-    queryKey: ['animals', FARM_ID],
-    queryFn: () => animalsAPI.getAll(FARM_ID, { page: 0, size: 100 }),
+    queryKey: ['animals', farmId],
+    queryFn: () => animalsAPI.getAll(farmId!, { page: 0, size: 100 }),
+    enabled: !!farmId,
   });
 
   // Create mutation
   const createMutation = useMutation({
-    mutationFn: (data: Partial<Animal>) => animalsAPI.create(FARM_ID, data),
+    mutationFn: (data: Partial<Animal>) => animalsAPI.create(farmId!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['animals', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['animals', farmId] });
       toast({ title: 'Animal creado exitosamente' });
       setIsDialogOpen(false);
       resetForm();
@@ -69,9 +70,9 @@ const Animals = () => {
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Animal> }) => 
-      animalsAPI.update(FARM_ID, id, data),
+      animalsAPI.update(farmId!, id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['animals', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['animals', farmId] });
       toast({ title: 'Animal actualizado exitosamente' });
       setIsDialogOpen(false);
       resetForm();
@@ -87,9 +88,9 @@ const Animals = () => {
 
   // Delete mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => animalsAPI.delete(FARM_ID, id),
+    mutationFn: (id: number) => animalsAPI.delete(farmId!, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['animals', FARM_ID] });
+      queryClient.invalidateQueries({ queryKey: ['animals', farmId] });
       toast({ title: 'Animal eliminado exitosamente' });
     },
     onError: (error: any) => {
